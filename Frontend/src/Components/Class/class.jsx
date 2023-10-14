@@ -1,0 +1,109 @@
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import NewClass from "./classModal";
+import { toast } from "react-toastify";
+import ClassModal from "./classModal";
+import axios from "axios";
+
+function Class() {
+  const Class = {
+    className: "new",
+    teacherId: localStorage.getItem("userId"),
+  };
+  const [classUpdate, setClassUpdate] = useState({});
+
+  const [classModalShow, setClassModalShow] = useState(false);
+  useEffect(() => {}, []);
+
+  const handleClickCreate = async (e, newClass) => {
+    setClassUpdate(Class);
+
+    e.preventDefault();
+    const response = await axios.post(
+      "http://localhost:3005/api/classes/",
+      Class,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (newClass === "new") {
+      setClassModalShow(true);
+    } else {
+      setClassModalShow(true);
+    }
+  };
+
+  return (
+    <div className="row newBriefMain mt-4 rounded">
+      <div className="col-md-12">
+        <div className="card py-2">
+          <div
+            className="card-header newBriefHeader"
+            style={{ flex: 1, display: "flex", alignItems: "center" }}
+          >
+            <div className="createBriefIconDiv">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6 text-white"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                />
+              </svg>
+            </div>
+            <div>
+              <h5 className="card-title">Brand Profile</h5>
+              <p className="card-text">Select the brand you are briefing for</p>
+            </div>{" "}
+          </div>
+        </div>
+      </div>
+      {/* brand profile new */}
+
+      <div
+        className="row d-flex justify-content-center align-items-center"
+        style={{ height: "auto", overflow: "auto" }}
+      >
+        <div
+          className="card border-2 border-light pb-3"
+          style={{ width: "50vh", maxHeight: "30vh" }}
+        >
+          <div className="card-body text-center">
+            <div className="rounded w-10 h-100 d-flex align-items-center justify-content-center">
+              <img
+                width="40"
+                height="40"
+                src="https://img.icons8.com/ios-filled/50/00000/plus.png"
+                alt="plus"
+                className="createIcon"
+                onClick={(e) => handleClickCreate(e, "new")}
+              />{" "}
+            </div>
+            <div className="text-small">Create Class</div>
+          </div>
+        </div>
+        {[].map((newClass) => (
+          <div> </div>
+        ))}
+      </div>
+
+      {classModalShow && (
+        <ClassModal
+          show={classModalShow}
+          class={classUpdate}
+          onHide={() => setClassModalShow(false)}
+        />
+      )}
+    </div>
+  );
+}
+
+export default Class;
