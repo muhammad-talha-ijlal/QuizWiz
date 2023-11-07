@@ -1,41 +1,60 @@
 import React, { useRef, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-
+import axios from "axios";
 import { toast } from "react-toastify";
 
 function ClassModal(props) {
-  const [className, setClassName] = useState(props);
-
+  console.log(props);
+  const [className, setClassName] = useState(props.class.className);
+  const [quizDropdown, setQuizDropdown] = useState(props.class.quizDropdown);
   const [specialChar, setSpecialChar] = useState(false);
   const [notValidString, setNotValidString] = useState(false);
   const [load, setLoad] = useState(false);
 
-  const submitForm = (e) => {};
+  const submitForm = async (e) => {
+    e.preventDefault();
+    let updatedClass = {
+      className: className,
+      quizDropdown: quizDropdown,
+    };
+    let updatedData = { ...props.class, ...updatedClass };
+    console.log(updatedData);
+    const response = await axios.put(
+      `http://localhost:3005/api/classes/${props.class._id}`,
+      updatedData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response.status === 200) {
+      toast.success("Class updated successfully");
+      props.onHide();
+    }
+  };
 
-  const checkCharacters = (temp) => {};
   return (
     <Modal {...props} centered>
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Update Class
-        </Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">Class</Modal.Title>
       </Modal.Header>
       <form onSubmit={submitForm}>
         <Modal.Body>
           <div className="form-group">
-            <label htmlFor="">First Name</label>
+            <label htmlFor="">Class Name</label>
             <input
               type="text"
               className="form-control mt-2 mb-2"
-              placeholder="First Name"
+              placeholder="Name of the class"
               value={className}
               onChange={(e) => {
                 setClassName(e.target.value);
               }}
             />
 
-            {/* <label htmlFor="">quiz</label>
+            <label htmlFor="">Quiz</label>
             <select
               className="form-control mt-2 mb-2"
               value={quizDropdown}
@@ -45,17 +64,7 @@ function ClassModal(props) {
             >
               <option value="true">Yes</option>
               <option value="false">No</option>
-            </select> */}
-            {specialChar && (
-              <small className="text-danger">
-                Name should not inlcude special characters.
-              </small>
-            )}
-            {notValidString && (
-              <small className="text-danger">
-                String must include value and less than 20 characters.
-              </small>
-            )}
+            </select>
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -66,7 +75,7 @@ function ClassModal(props) {
             <>
               {!notValidString && (
                 <Button type="submit" disabled={load ? true : false}>
-                  {"Update"}
+                  {"Save"}
                 </Button>
               )}
             </>

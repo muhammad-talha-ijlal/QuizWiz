@@ -7,7 +7,8 @@ import axios from "axios";
 
 function Class() {
   const Class = {
-    className: "new",
+    _id: "",
+    className: "New Class",
     teacherId: localStorage.getItem("userId"),
   };
   const [classUpdate, setClassUpdate] = useState({});
@@ -16,7 +17,7 @@ function Class() {
   useEffect(() => {}, []);
 
   const handleClickCreate = async (e, newClass) => {
-    setClassUpdate(Class);
+    //setClassUpdate(Class);
 
     e.preventDefault();
     const response = await axios.post(
@@ -28,6 +29,10 @@ function Class() {
         },
       }
     );
+    const data = response.data;
+    console.log(data);
+    setClassUpdate(data);
+
     if (newClass === "new") {
       setClassModalShow(true);
     } else {

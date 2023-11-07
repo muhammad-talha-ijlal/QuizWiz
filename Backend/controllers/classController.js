@@ -2,13 +2,13 @@ const bcrypt = require("bcrypt");
 const Class = require("../models/classModel");
 
 async function createClass(req, res) {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const newClass = new Class({
       className: req.body.className,
       teacherId: req.body.teacherId,
     });
-    //console.log(newClass);
+    console.log(newClass);
     const newClass1 = await newClass.save();
     res.status(201).json(newClass1);
   } catch (error) {
@@ -18,8 +18,8 @@ async function createClass(req, res) {
 
 async function getClasses(req, res) {
   try {
-    const newClasss = await Class.find();
-    res.json(newClasss);
+    const newClass = await Class.find();
+    res.json(newClass);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -40,26 +40,13 @@ async function getClass(req, res, next) {
 }
 
 async function updateClass(req, res) {
+  // console.log(req.params);
   newClass = await Class.findById(req.params.id);
-  console.log(res);
-  if (req.body.newClassname != null) {
-    newClass.newClassname = req.body.newClassname;
-  }
-  if (req.body.password != null) {
-    newClass.password = await bcrypt.hash(req.body.password, 10);
-  }
-  if (req.body.firstName != null) {
-    newClass.firstName = req.body.firstName;
-  }
-  if (req.body.lastName != null) {
-    newClass.lastName = req.body.lastName;
-  }
-  if (req.body.dob != null) {
-    newClass.dob = req.body.dob;
-  }
-  if (req.body.role != null) {
-    newClass.role = req.body.role;
-  }
+  // console.log(res);
+  console.log(newClass);
+  newClass.className = req.body.className;
+  newClass.teacherId = req.body.teacherId;
+
   try {
     newClass.save();
     const updatedClass = newClass;
