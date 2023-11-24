@@ -98,6 +98,7 @@ function generteLoginToken(user) {
 }
 async function loginUser(req, res) {
   const { email, password } = req.body;
+  console.log({ email, password });
 
   try {
     const user = await User.findOne({ email });
@@ -116,6 +117,7 @@ async function loginUser(req, res) {
       fullname: user.fullname,
       userid: user._id,
       token: token,
+      role: user.role,
     });
   } catch (err) {
     return res.status(500).json({ message: err });
