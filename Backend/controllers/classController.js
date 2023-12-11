@@ -19,6 +19,7 @@ async function createClass(req, res) {
 async function getClasses(req, res) {
   try {
     const newClass = await Class.find();
+    console.log(newClass);
     res.json(newClass);
   } catch (error) {
     res.status(500).json({ message: error.message });

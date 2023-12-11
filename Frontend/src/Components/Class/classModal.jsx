@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 function ClassModal(props) {
-  console.log(props);
+  //console.log(props);
   const [className, setClassName] = useState(props.class.className);
   const [quizDropdown, setQuizDropdown] = useState(props.class.quizDropdown);
   const [specialChar, setSpecialChar] = useState(false);
@@ -20,7 +20,7 @@ function ClassModal(props) {
       quizDropdown: quizDropdown,
     };
     let updatedData = { ...props.class, ...updatedClass };
-    console.log(updatedData);
+    //console.log(updatedData);
     const response = await axios.put(
       `http://localhost:3005/api/classes/${props.class._id}`,
       updatedData,
