@@ -38,6 +38,7 @@ export default function SignInForm() {
       setUserCredentials(user);
       if (data.token) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.userid);
       }
       if (data.role === "teacher") {
         navigate("/teacher");
