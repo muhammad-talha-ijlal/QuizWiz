@@ -13,6 +13,7 @@ function ClassModal(props) {
   const [load, setLoad] = useState(false);
 
   const submitForm = async (e) => {
+    //
     e.preventDefault();
     let updatedClass = {
       className: className,
