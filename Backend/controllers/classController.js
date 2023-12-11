@@ -70,69 +70,6 @@ async function deleteClass(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
-const jwt = require("jsonwebtoken"); // Import the jwt library
-
-function generteLoginToken(newClass) {
-  const payload = {
-    role: newClass.role,
-
-    id: newClass._id,
-  };
-  const token = jwt.sign(payload, "adsfasdfjkh$#asdfasdf.adsfxc");
-  return token;
-}
-async function loginClass(req, res) {
-  const { email, password } = req.body;
-  console.log({ email, password });
-
-  try {
-    const newClass = await Class.findOne({ email });
-    console.log(newClass);
-    if (!newClass) return res.status(404).json({ error: "Class not found" });
-
-    if (!(await bcrypt.compare(password, newClass.password))) {
-      return res.status(400).json({ error: "Invalid credentials" });
-    }
-
-    var token = generteLoginToken(newClass);
-
-    return res.status(200).json({
-      message: "Logged in successfully",
-      email: email,
-      fullname: newClass.fullname,
-      newClassid: newClass._id,
-      token: token,
-      role: newClass.role,
-    });
-  } catch (err) {
-    return res.status(500).json({ message: err });
-  }
-}
-async function adminDashboard(req, res) {
-  return res.status(200).json({ message: "Welcome to admin dashboard" });
-}
-
-function requireRoles(roles) {
-  return (req, res, next) => {
-    console.log(req);
-    const newClassRole = req.newClass.role; // Assuming you saved the newClass's role in req.newClass
-    console.log(newClassRole);
-    if (roles.includes(newClassRole)) {
-      // Class has one of the required roles, so allow access
-
-      next();
-    } else {
-      // Class does not have any of the required roles, so send a forbidden response
-
-      res.status(403).json({ message: "Permission denied" });
-    }
-  };
-}
-
-async function sharedRoles(req, res) {
-  const role = req.newClass.role;
-  return res.json({ message: `Welcome ${role}` });
-}
 
 module.exports = {
   createClass,
@@ -140,8 +77,4 @@ module.exports = {
   getClass,
   updateClass,
   deleteClass,
-  loginClass,
-  adminDashboard,
-  requireRoles,
-  sharedRoles,
 };
