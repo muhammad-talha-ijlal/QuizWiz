@@ -10,7 +10,6 @@ async function createQuiz(req, res) {
       questions: req.body.questions,
       marks: req.body.marks,
       totalMarks: req.body.totalMarks,
-      quizId: req.body.quizId,
       quizCode: req.body.quizCode,
       quizDate: req.body.quizDate,
       quizTime: req.body.quizTime,
@@ -55,12 +54,20 @@ async function getQuiz(req, res, next) {
 }
 
 async function updateQuiz(req, res) {
-  // console.log(req.params);
+  //console.log(req.body);
   newQuiz = await Quiz.findById(req.params.id);
   // console.log(res);
   console.log(newQuiz);
   newQuiz.quizName = req.body.quizName;
-  newQuiz.teacherId = req.body.teacherId;
+  newQuiz.totalMarks = req.body.totalMarks;
+  newQuiz.quizCode = req.body.quizCode;
+  newQuiz.quizDate = req.body.quizDate;
+  newQuiz.quizDuration = req.body.quizDuration;
+  newQuiz.quizStatus = req.body.quizStatus;
+  newQuiz.quizType = req.body.quizType;
+  newQuiz.quizDescription = req.body.quizDescription;
+  newQuiz.quizInstructions = req.body.quizInstructions;
+  newQuiz.answerKey = req.body.answerKey;
 
   try {
     newQuiz.save();

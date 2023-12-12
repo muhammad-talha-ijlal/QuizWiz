@@ -1,32 +1,46 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import ClassModal from "./classModal";
+import QuizModal from "./quizModal";
 import axios from "axios";
 
-function Class() {
-  const Class = {
+function Quiz() {
+  const Quiz = {
     _id: "",
-    className: "New Class",
+    quizName: "New Quiz",
     teacherId: localStorage.getItem("userId"),
+    classId: "",
+    questions: [],
+    marks: 10,
+    totalMarks: 10,
+    quizCode: 2134,
+    // current date
+    quizDate: Date().toLocaleString(),
+    quizTime: Date().toLocaleString(),
+    quizDuration: 10,
+    quizStatus: "active",
+    quizType: "objective",
+    quizDescription: "New Quiz",
+    quizInstructions: "New Quiz",
+    answerKey: [],
   };
-  const [classUpdate, setClassUpdate] = useState({});
-  const [classes, setClasses] = useState([]);
+  const [quizUpdate, setQuizUpdate] = useState({});
+  const [quiz, setQuizes] = useState([]);
 
-  const [classModalShow, setClassModalShow] = useState(false);
+  const [quizModalShow, setQuizModalShow] = useState(false);
   useEffect(() => {
-    getAllClasses();
-  }, [classUpdate]);
-  const getAllClasses = async () => {
-    const response = await axios.get("http://localhost:3005/api/classes/");
+    getAllQuizes();
+  }, [quizModalShow]);
+  const getAllQuizes = async () => {
+    const response = await axios.get("http://localhost:3005/api/quiz/");
     const data = response.data;
-    console.log(data);
-    setClasses(data);
+    //console.log(data);
+    setQuizes(data);
   };
-  const handleClickDelete = async (e, newClass) => {
+  const handleClickDelete = async (e, newQuiz) => {
     e.preventDefault();
-    console.log(newClass);
+    console.log(newQuiz);
     const response = await axios.delete(
-      `http://localhost:3005/api/classes/${newClass._id}`,
+      `http://localhost:3005/api/quiz/${newQuiz._id}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -34,19 +48,19 @@ function Class() {
       }
     );
     if (response.status === 200) {
-      toast.success("Class deleted successfully");
-      getAllClasses();
+      toast.success("Quiz deleted successfully");
+      getAllQuizes();
     }
   };
-  const handleClickCreate = async (e, newClass) => {
-    //setClassUpdate(Class);
+  const handleClickCreate = async (e, newQuiz) => {
+    //setQuizUpdate(Quiz);
 
     e.preventDefault();
 
-    if (newClass === "new") {
+    if (newQuiz === "new") {
       const response = await axios.post(
-        "http://localhost:3005/api/classes/",
-        Class,
+        "http://localhost:3005/api/quiz/",
+        Quiz,
         {
           headers: {
             "Content-Type": "application/json",
@@ -55,11 +69,11 @@ function Class() {
       );
       const data = response.data;
       // console.log(data);
-      setClassUpdate(data);
-      setClassModalShow(true);
+      setQuizUpdate(data);
+      setQuizModalShow(true);
     } else {
-      setClassUpdate(newClass);
-      setClassModalShow(true);
+      setQuizUpdate(newQuiz);
+      setQuizModalShow(true);
     }
   };
 
@@ -88,8 +102,8 @@ function Class() {
               </svg>
             </div>
             <div>
-              <h5 className="card-title">All Classes</h5>
-              <p className="card-text">Select the Class you are briefing for</p>
+              <h5 className="card-title">All Quizes</h5>
+              <p className="card-text">Select the Quiz you are briefing for</p>
             </div>{" "}
           </div>
         </div>
@@ -115,10 +129,10 @@ function Class() {
                 onClick={(e) => handleClickCreate(e, "new")}
               />{" "}
             </div>
-            <div className="text-small">Create Class</div>
+            <div className="text-small">Create Quiz</div>
           </div>
         </div>
-        {classes.map((newClass) => (
+        {quiz.map((newQuiz) => (
           <div
             className="card border-2 border-light pb-3"
             style={{ width: "50vh", maxHeight: "30vh" }}
@@ -130,7 +144,7 @@ function Class() {
               alt="plus"
               className="createIcon"
               style={{ position: "absolute", top: "0", right: "0" }}
-              onClick={(e) => handleClickDelete(e, newClass)}
+              onClick={(e) => handleClickDelete(e, newQuiz)}
             />
 
             <div className="card-body text-center">
@@ -141,25 +155,25 @@ function Class() {
                   src="https://img.icons8.com/ios-filled/50/00000/plus.png"
                   alt="plus"
                   className="createIcon"
-                  onClick={(e) => handleClickCreate(e, newClass)}
+                  onClick={(e) => handleClickCreate(e, newQuiz)}
                 />{" "}
               </div>
-              <div className="text-small">{newClass.className}</div>
+              <div className="text-small">{newQuiz.quizName}</div>
             </div>
           </div>
         ))}
       </div>
 
-      {classModalShow && (
-        <ClassModal
-          show={classModalShow}
+      {quizModalShow && (
+        <QuizModal
+          show={quizModalShow}
           // eslint-disable-next-line no-undef
-          class={classUpdate}
-          onHide={() => setClassModalShow(false)}
+          quiz={quizUpdate}
+          onHide={() => setQuizModalShow(false)}
         />
       )}
     </div>
   );
 }
 
-export default Class;
+export default Quiz;
