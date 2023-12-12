@@ -49,7 +49,7 @@ async function updateQuestion(req, res) {
   //console.log(req.body);
   newQuestion = await Question.findById(req.params.id);
   // console.log(res);
-  console.log(newQuestion);
+  // console.log(newQuestion);
   newQuestion.questionName = req.body.questionName;
   newQuestion.teacherId = req.body.teacherId;
   newQuestion.questionDescription = req.body.questionDescription;

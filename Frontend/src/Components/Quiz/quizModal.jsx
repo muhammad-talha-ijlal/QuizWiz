@@ -27,7 +27,22 @@ function QuizModal(props) {
   const [specialChar, setSpecialChar] = useState(false);
   const [notValidString, setNotValidString] = useState(false);
   const [load, setLoad] = useState(false);
+  const [availableQuestions, setAvailableQuestions] = useState([]);
+  const getAllQuestions = async () => {
+    const response = await axios.get("http://localhost:3005/api/question/");
+    const data = response.data;
+    // data.forEach((question) => {
+    //   availableQuestions.push({
+    //     id: question._id,
+    //     questionText: question.questionText,
+    //   });
+    // });
+    setAvailableQuestions(data);
+  };
+  // State variable to store selected questions
+  const [selectedQuestions, setSelectedQuestions] = useState([]);
   useEffect(() => {
+    getAllQuestions();
     //console.log(quizTime);
     const convertedTime = new Date(quizDate);
     // // Format time as HH:mm AM/PM
@@ -45,6 +60,8 @@ function QuizModal(props) {
   }, []);
 
   const submitForm = async (e) => {
+    console.log(selectedQuestions);
+
     //console.log(quizDate);
     e.preventDefault();
     let updatedQuiz = {
@@ -54,6 +71,7 @@ function QuizModal(props) {
       quizCode: quizCode,
       quizDate: quizDate,
       // quizTime: quizTime,
+      questions: selectedQuestions,
       quizDuration: quizDuration,
       quizStatus: quizStatus,
       quizType: quizType,
@@ -200,16 +218,29 @@ function QuizModal(props) {
                 setQuizInstructions(e.target.value);
               }}
             />
-            <label htmlFor="">Answer Key</label>
-            <input
-              type="text"
-              className="form-control mt-2 mb-2"
-              placeholder="Answer Key"
-              value={answerKey}
-              onChange={(e) => {
-                setAnswerKey(e.target.value);
-              }}
-            />
+            <div>
+              <label htmlFor="selectedQuestions">Select Questions</label>
+              <select
+                multiple
+                className="form-control mt-2 mb-2"
+                id="selectedQuestions"
+                value={selectedQuestions}
+                onChange={(e) =>
+                  setSelectedQuestions(
+                    Array.from(
+                      e.target.selectedOptions,
+                      (option) => option.value
+                    )
+                  )
+                }
+              >
+                {availableQuestions.map((question) => (
+                  <option key={question._id} value={question._id}>
+                    {question.questionName}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer>

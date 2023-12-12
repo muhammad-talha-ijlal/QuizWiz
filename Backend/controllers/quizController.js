@@ -60,6 +60,7 @@ async function updateQuiz(req, res) {
   console.log(newQuiz);
   newQuiz.quizName = req.body.quizName;
   newQuiz.totalMarks = req.body.totalMarks;
+  newQuiz.questions = req.body.questions;
   newQuiz.quizCode = req.body.quizCode;
   newQuiz.quizDate = req.body.quizDate;
   newQuiz.quizDuration = req.body.quizDuration;
@@ -67,7 +68,6 @@ async function updateQuiz(req, res) {
   newQuiz.quizType = req.body.quizType;
   newQuiz.quizDescription = req.body.quizDescription;
   newQuiz.quizInstructions = req.body.quizInstructions;
-  newQuiz.answerKey = req.body.answerKey;
 
   try {
     newQuiz.save();

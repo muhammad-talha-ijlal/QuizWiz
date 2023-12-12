@@ -8,7 +8,7 @@ function Question() {
     _id: "",
     questionName: "New Question",
     teacherId: localStorage.getItem("userId"),
-    questionDescription: "New Question",
+    questionDescription: "",
     answerKey: "",
     option1: "",
     option2: "",
