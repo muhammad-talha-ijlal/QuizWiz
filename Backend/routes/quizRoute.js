@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const quizController = require("../controllers/quizController");
-const validateToken = require("../utils/authMiddleware");
 // Middleware to get user by ID
 router.post("/quiz", quizController.createQuiz);
 router.delete("/quiz/:id", quizController.deleteQuiz);
