@@ -7,17 +7,27 @@ import {
   NavLink,
 } from "./navigationBar-style.jsx";
 export default function NavigationBar() {
+  const userId = localStorage.getItem("userId");
+  const handleClickSignOut = () => {
+    localStorage.removeItem("userId");
+    window.location.href = "/";
+  };
+
   return (
     <Fragment>
       <NavigationBarContainer>
         <LogoContainer to="/">
-          <img src="/Assests/crown.svg" alt="Crown" className="logo" />
+          <img src="" alt="Crown" className="logo" />
         </LogoContainer>
         <NavLinksContainer>
           <NavLink to="/shop">SHOP</NavLink>
-          <NavLink as="span">SIGN OUT</NavLink>
-
-          <NavLink to="/auth">SIGN IN</NavLink>
+          {userId ? ( // if currentUser is not null
+            <NavLink onClick={handleClickSignOut} as="span">
+              SIGN OUT
+            </NavLink>
+          ) : (
+            <NavLink to="/auth">SIGN IN</NavLink>
+          )}
         </NavLinksContainer>
       </NavigationBarContainer>
       <Outlet />

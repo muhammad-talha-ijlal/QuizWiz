@@ -1,46 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import QuizModal from "./quizModal";
+import QuestionModal from "./questionModal";
 import axios from "axios";
 
-function Quiz() {
-  const Quiz = {
+function Question() {
+  const Question = {
     _id: "",
-    quizName: "New Quiz",
+    questionName: "New Question",
     teacherId: localStorage.getItem("userId"),
-    classId: "",
-    questions: [],
-    marks: 10,
-    totalMarks: 10,
-    quizCode: 2134,
-    // current date
-    quizDate: Date().toLocaleString(),
-    quizTime: Date().toLocaleString(),
-    quizDuration: 10,
-    quizStatus: "active",
-    quizType: "objective",
-    quizDescription: "New Quiz",
-    quizInstructions: "New Quiz",
-    answerKey: [],
+    questionDescription: "New Question",
+    answerKey: "",
+    option1: "",
+    option2: "",
+    option3: "",
+    option4: "",
   };
-  const [quizUpdate, setQuizUpdate] = useState({});
-  const [quiz, setQuizes] = useState([]);
+  const [questionUpdate, setQuestionUpdate] = useState({});
+  const [question, setQuestions] = useState([]);
 
-  const [quizModalShow, setQuizModalShow] = useState(false);
+  const [questionModalShow, setQuestionModalShow] = useState(false);
   useEffect(() => {
-    getAllQuizes();
-  }, [quizModalShow]);
-  const getAllQuizes = async () => {
-    const response = await axios.get("http://localhost:3005/api/quiz/");
+    getAllQuestions();
+  }, [questionModalShow]);
+  const getAllQuestions = async () => {
+    const response = await axios.get("http://localhost:3005/api/question/");
     const data = response.data;
     //console.log(data);
-    setQuizes(data);
+    setQuestions(data);
   };
-  const handleClickDelete = async (e, newQuiz) => {
+  const handleClickDelete = async (e, newQuestion) => {
     e.preventDefault();
-    console.log(newQuiz);
+    console.log(newQuestion);
     const response = await axios.delete(
-      `http://localhost:3005/api/quiz/${newQuiz._id}`,
+      `http://localhost:3005/api/question/${newQuestion._id}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -48,19 +40,19 @@ function Quiz() {
       }
     );
     if (response.status === 200) {
-      toast.success("Quiz deleted successfully");
-      getAllQuizes();
+      toast.success("Question deleted successfully");
+      getAllQuestions();
     }
   };
-  const handleClickCreate = async (e, newQuiz) => {
-    //setQuizUpdate(Quiz);
+  const handleClickCreate = async (e, newQuestion) => {
+    //setQuestionUpdate(Question);
 
     e.preventDefault();
 
-    if (newQuiz === "new") {
+    if (newQuestion === "new") {
       const response = await axios.post(
-        "http://localhost:3005/api/quiz/",
-        Quiz,
+        "http://localhost:3005/api/question/",
+        Question,
         {
           headers: {
             "Content-Type": "application/json",
@@ -69,11 +61,11 @@ function Quiz() {
       );
       const data = response.data;
       // console.log(data);
-      setQuizUpdate(data);
-      setQuizModalShow(true);
+      setQuestionUpdate(data);
+      setQuestionModalShow(true);
     } else {
-      setQuizUpdate(newQuiz);
-      setQuizModalShow(true);
+      setQuestionUpdate(newQuestion);
+      setQuestionModalShow(true);
     }
   };
 
@@ -102,8 +94,10 @@ function Quiz() {
               </svg>
             </div>
             <div>
-              <h5 className="card-title">All Quizes</h5>
-              <p className="card-text">Select the Quiz you are briefing for</p>
+              <h5 className="card-title">All Questions</h5>
+              <p className="card-text">
+                Select the Question you are briefing for
+              </p>
             </div>{" "}
           </div>
         </div>
@@ -129,14 +123,14 @@ function Quiz() {
                 onClick={(e) => handleClickCreate(e, "new")}
               />{" "}
             </div>
-            <div className="text-small">Create Quiz</div>
+            <div className="text-small">Create Question</div>
           </div>
         </div>
-        {quiz.map((newQuiz) => (
+        {question.map((newQuestion) => (
           <div
             className="card border-2 border-light pb-3"
             style={{ width: "50vh", maxHeight: "30vh" }}
-            key={newQuiz._id}
+            key={newQuestion._id}
           >
             <img
               width="20"
@@ -145,7 +139,7 @@ function Quiz() {
               alt="plus"
               className="createIcon"
               style={{ position: "absolute", top: "0", right: "0" }}
-              onClick={(e) => handleClickDelete(e, newQuiz)}
+              onClick={(e) => handleClickDelete(e, newQuestion)}
             />
 
             <div className="card-body text-center">
@@ -156,25 +150,25 @@ function Quiz() {
                   src="https://img.icons8.com/ios-filled/50/00000/plus.png"
                   alt="plus"
                   className="createIcon"
-                  onClick={(e) => handleClickCreate(e, newQuiz)}
+                  onClick={(e) => handleClickCreate(e, newQuestion)}
                 />{" "}
               </div>
-              <div className="text-small">{newQuiz.quizName}</div>
+              <div className="text-small">{newQuestion.questionName}</div>
             </div>
           </div>
         ))}
       </div>
 
-      {quizModalShow && (
-        <QuizModal
-          show={quizModalShow}
+      {questionModalShow && (
+        <QuestionModal
+          show={questionModalShow}
           // eslint-disable-next-line no-undef
-          quiz={quizUpdate}
-          onHide={() => setQuizModalShow(false)}
+          question={questionUpdate}
+          onHide={() => setQuestionModalShow(false)}
         />
       )}
     </div>
   );
 }
 
-export default Quiz;
+export default Question;

@@ -19,7 +19,7 @@ function Class() {
   const getAllClasses = async () => {
     const response = await axios.get("http://localhost:3005/api/classes/");
     const data = response.data;
-    console.log(data);
+    //console.log(data);
     setClasses(data);
   };
   const handleClickDelete = async (e, newClass) => {

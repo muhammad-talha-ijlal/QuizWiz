@@ -3,14 +3,14 @@ const mongoose = require("mongoose");
 const questionSchema = new mongoose.Schema({
   questionName: { type: String, required: true },
   teacherId: { type: String, required: true },
-  questionDescription: { type: String, required: true },
-  answerKey: { type: string, required: true },
-  option1: { type: String, required: true },
-  option2: { type: String, required: true },
-  option3: { type: String, required: true },
-  option4: { type: String, required: true },
+  questionDescription: { type: String },
+  answerKey: { type: String},
+  option1: { type: String },
+  option2: { type: String },
+  option3: { type: String },
+  option4: { type: String },
 });
 
-const Quiz = mongoose.model("Quiz", questionSchema);
+const Question = mongoose.model("Question", questionSchema);
 
-module.exports = Quiz;
+module.exports = Question;

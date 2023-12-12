@@ -24,7 +24,7 @@ export default function SignInForm() {
     console.log(userCredentials);
     try {
       const response = await axios.post(
-        "http://localhost:3005/api//users/login",
+        "http://localhost:3005/api/users/login",
         userCredentials,
         {
           headers: {
