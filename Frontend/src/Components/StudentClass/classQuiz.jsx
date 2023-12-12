@@ -69,10 +69,10 @@ function ClassQuiz(props) {
           studentId: userId,
         }
       );
-
+      console.log(response);
       if (response.status === 200) {
         // Display the result or handle it as needed
-        toast.success(`Your score is: ${response.data.score}`);
+        toast.success(`Your score is: ${response.data.quizResult.marks}`);
       }
     } catch (error) {
       console.error("Error submitting answers:", error);

@@ -122,7 +122,12 @@ async function checkAnswers(req, res) {
     };
     // newQuiz.quizResult.push(quizResult);
     newQuiz.save();
-    res.status(200).json({ message: "Quiz result saved successfully" });
+    res
+      .status(200)
+      .json({
+        message: "Quiz result saved successfully",
+        quizResult: quizResult,
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
