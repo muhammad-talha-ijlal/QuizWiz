@@ -5,6 +5,7 @@ const quizController = require("../controllers/quizController");
 router.post("/quiz", quizController.createQuiz);
 router.delete("/quiz/:id", quizController.deleteQuiz);
 router.get("/quiz", quizController.getQuizes);
-// router.get("/users/:id", quizController.getUser);
+router.get("/quiz/:id", quizController.getQuiz);
+router.post("/quiz/checkAnswers", quizController.checkAnswers);
 router.put("/quiz/:id", quizController.updateQuiz);
 module.exports = router;

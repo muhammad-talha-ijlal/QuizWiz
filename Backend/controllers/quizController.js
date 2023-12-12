@@ -1,4 +1,6 @@
 const Quiz = require("../models/quizModel");
+const Question = require("../models/questionModel");
+const async = require("async");
 
 async function createQuiz(req, res) {
   // console.log(req.body);
@@ -92,10 +94,46 @@ async function deleteQuiz(req, res) {
   }
 }
 
+async function checkAnswers(req, res) {
+  console.log(req.body);
+  try {
+    const newQuiz = await Quiz.findById(req.body.quizId);
+    if (newQuiz == null) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+    const questionIds = newQuiz.questions;
+    const questions = await async.map(questionIds, async (questionId) => {
+      return await Question.findById(questionId); // Replace Question with your actual model
+    });
+    console.log(questions);
+    console.log(newQuiz);
+    const studentAnswers = req.body.answers;
+    let marks = 0;
+    for (let i = 0; i < questions.length; i++) {
+      if (questions[i].answerKey === studentAnswers[i]) {
+        marks += 1;
+      }
+    }
+    const quizResult = {
+      marks: marks,
+      totalMarks: newQuiz.totalMarks,
+      quizId: req.body.quizId,
+      studentId: req.body.studentId,
+    };
+    // newQuiz.quizResult.push(quizResult);
+    newQuiz.save();
+    res.status(200).json({ message: "Quiz result saved successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
 module.exports = {
   createQuiz,
   getQuizes,
   getQuiz,
   updateQuiz,
   deleteQuiz,
+  checkAnswers,
 };

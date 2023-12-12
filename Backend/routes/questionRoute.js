@@ -5,6 +5,9 @@ const questionController = require("../controllers/questionController");
 router.post("/question", questionController.createQuestion);
 router.delete("/question/:id", questionController.deleteQuestion);
 router.get("/question", questionController.getQuestions);
-// router.get("/users/:id", questionController.getUser);
+router.post(
+  "/question/getQuestionsByIds",
+  questionController.getSpecificQuestionsByQuestionId
+);
 router.put("/question/:id", questionController.updateQuestion);
 module.exports = router;

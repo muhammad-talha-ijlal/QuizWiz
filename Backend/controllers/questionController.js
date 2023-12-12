@@ -45,6 +45,19 @@ async function getQuestion(req, res, next) {
   res.json(newQuestion);
 }
 
+async function getSpecificQuestionsByQuestionId(req, res) {
+  //console.log(req.body);
+  try {
+    const newQuestion = await Question.find({
+      _id: { $in: req.body },
+    });
+    console.log(newQuestion);
+    res.json(newQuestion);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 async function updateQuestion(req, res) {
   //console.log(req.body);
   newQuestion = await Question.findById(req.params.id);
@@ -88,4 +101,5 @@ module.exports = {
   getQuestion,
   updateQuestion,
   deleteQuestion,
+  getSpecificQuestionsByQuestionId,
 };
