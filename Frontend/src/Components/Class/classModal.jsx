@@ -1,23 +1,35 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 function ClassModal(props) {
-  //console.log(props);
+  //console.log(props.class.quizDropdown);
   const [className, setClassName] = useState(props.class.className);
   const [quizDropdown, setQuizDropdown] = useState(props.class.quizDropdown);
+  const [quizzes, setQuizzes] = useState([]);
+  const [quizId, setQuizId] = useState(props.class.quizId);
+  const [quizName, setQuizName] = useState(props.class.quizName);
   const [specialChar, setSpecialChar] = useState(false);
   const [notValidString, setNotValidString] = useState(false);
   const [load, setLoad] = useState(false);
-
+  const getAllQuizes = async () => {
+    const response = await axios.get("http://localhost:3005/api/quiz");
+    if (response.status === 200) {
+      setQuizzes(response.data);
+    }
+  };
+  useEffect(() => {
+    getAllQuizes();
+    console.log(quizzes);
+  }, []);
   const submitForm = async (e) => {
-    //
     e.preventDefault();
     let updatedClass = {
       className: className,
-      quizDropdown: quizDropdown,
+      quizId: quizId,
+      quizName: quizName,
     };
     let updatedData = { ...props.class, ...updatedClass };
     //console.log(updatedData);
@@ -54,17 +66,35 @@ function ClassModal(props) {
                 setClassName(e.target.value);
               }}
             />
-
-            <label htmlFor="">Quiz</label>
+            <label htmlFor="">Quiz ID</label>
+            <input
+              type="text"
+              disabled
+              className="form-control mt-2 mb-2"
+              placeholder="Name of the class"
+              value={quizId}
+            />
+            <label htmlFor="">Quiz Name</label>
             <select
               className="form-control mt-2 mb-2"
               value={quizDropdown}
               onChange={(e) => {
-                setQuizDropdown(e.target.value);
+                setQuizId(e.target.value);
+                setQuizName(
+                  quizzes.filter((quiz) => quiz._id === e.target.value)[0]
+                    .quizName
+                );
+                console.log(quizName);
               }}
             >
-              <option value="true">Yes</option>
-              <option value="false">No</option>
+              <option value="">Select Quiz</option>
+              {quizzes.map((quiz) => {
+                return (
+                  <option key={quiz._id} value={quiz._id}>
+                    {quiz.quizName}
+                  </option>
+                );
+              })}
             </select>
           </div>
         </Modal.Body>

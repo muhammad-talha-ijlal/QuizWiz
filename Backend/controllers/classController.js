@@ -47,7 +47,8 @@ async function updateClass(req, res) {
   console.log(newClass);
   newClass.className = req.body.className;
   newClass.teacherId = req.body.teacherId;
-
+  newClass.quizId = req.body.quizId;
+  newClass.quizName = req.body.quizName;
   try {
     newClass.save();
     const updatedClass = newClass;
